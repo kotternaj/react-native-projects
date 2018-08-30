@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import { Button, Card, CardSection, Input } from './common';
 
 class LoginForm extends Component {
-    state = { 'text': '' }
+    state = { 'text': '' };
 
     render() {
         return (
             <Card>
                 <CardSection>
                   <Input
-                  value={this.state.text}
-                  onChangeText={text.setState({ text })}
+                    label="Email"
+                    value={this.state.text}
+                    onChangeText={ text => text.setState({ text })}
                   />
                 </CardSection>
-                
+
                 <CardSection />
 
                 <CardSection>
