@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import firebase from 'firebase';
-import { Button, Card, CardSection, Input } from './common';
+import { Button, Card, CardSection, Input, Spinner } from './common';
 
 class LoginForm extends Component {
-    state = { email: '', password: '' };
+    state = { email: '', password: '', error: '', loading: false };
 
     onButtonPress(){
         const { email, password } = this.state;
 
-        this.setState({ error: ''});
+        this.setState({ error: '', loading: true});
 
         firebase.auth().signInWithEmailAndPassword(email, password)
          .catch(() => {
@@ -18,6 +18,17 @@ class LoginForm extends Component {
                   this.setState({error: 'Authentication Failed.'});
               });
          });
+    }
+
+    renderButton() {
+        if (this.state.loading) {
+            return <Spinner size='small' />;
+        }
+        return (
+            <Button onPress={this.onButtonPress.bind(this)}>
+               Log in
+            </Button>
+        )
     }
 
     render() {
@@ -31,7 +42,7 @@ class LoginForm extends Component {
                     onChangeText={ email => this.setState({ email })}
                   />
                 </CardSection>
-
+                    
                 <CardSection>
                     <Input 
                     secureTextEntry
@@ -40,13 +51,13 @@ class LoginForm extends Component {
                     onChangeText={password => this.setState({ password })}
                     />
                 </CardSection>
-                <Text style={errorTextStyle}>
+
+                <Text style={styles.errorTextStyle}>
                     {this.state.error}
                 </Text>
+
                 <CardSection>
-                    <Button onPress={this.onButtonPress}>
-                        Log in
-                    </Button>
+                   {this.renderButton()}
                 </CardSection>
             </Card>
         );
