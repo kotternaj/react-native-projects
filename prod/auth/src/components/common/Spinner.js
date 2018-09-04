@@ -17,4 +17,4 @@ import { View, ActivityIndicator } from 'react-native'
      }
  };
 
- export { Spinner }
+ export { Spinner };
