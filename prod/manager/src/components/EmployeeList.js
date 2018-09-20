@@ -1,42 +1,34 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, FlatList } from 'react-native';
+import { FlatList } from 'react-native';
 import { employeesFetch } from '../actions';
-
+import ListItem from './ListItem'
+ 
 class EmployeeList extends Component {
-    componentWillMount() {
-        this.props.employeesFetch();
-        
-        this.createDataSource(this.props)        
-    }
-    
-    componentWillReceiveProps(nextProps) {
-      // nextProps are the next set of props that this component
-      // will be rendered with
-      //this.props is still the old set of props
-        this.createDataSource(nextProps);
-    }
-
-    createDataSource({ employees }) {
-        const ds = new FlatList.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2
-        });
-
-        this.dataSource = dc.cloneWithRows(this.props.employees);
-    }
-
-    render() {
-        return (
-            <View>
-                <Text>EmployeeList</Text>
-                <Text>EmployeeList</Text>
-                <Text>EmployeeList</Text>
-                <Text>EmployeeList</Text>
-                <Text>EmployeeList</Text>
-                <Text>EmployeeList</Text>
-            </View>
-        );
-    }
+	componentWillMount() {
+		this.props.employeesFetch();
+	}
+	renderItem(employee) {
+		return <ListItem employee={employee} />;
+	}
+	render() {
+		return (
+			<FlatList
+				data={this.props.employees}
+				renderItem={this.renderItem.bind(this)}
+				keyExtractor={(employee, index) => index.toString()}
+			/>
+		);
+	}
 }
-
-export default connect (null,{ employeesFetch }) (EmployeeList);
+ 
+const mapStateToProps = (state) => {
+    const employees = _.map(state.employees, (val, uid) => {
+        return { ...val, uid };
+    });
+ 
+    return { employees }
+};
+ 
+export default connect(mapStateToProps, { employeesFetch })(EmployeeList);
