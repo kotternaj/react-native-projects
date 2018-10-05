@@ -26,7 +26,7 @@ class Deck extends Component {
             }
         });
 
-        this.state = { panResponder, position };
+        this.state = { panResponder, position, index: 0 };
     }
 
     forceSwipe(direction) {
@@ -34,12 +34,14 @@ class Deck extends Component {
         Animated.timing(this.state.position, {
             toValue: {x, y = 0},
             duration: SWIPE_OUT_DURATION
-        }).start(() => this.onSwipeCompletion(direction));
+        }).start(() => this.onSwipeComplete(direction));
     }
 
-    onSwipeCompletion(direction) {
-        const { onSwipeLeft, onSwipeRight } = this.props;
-        direction === 'right' ? onSwipeRight() : onSwipeLeft();
+    onSwipeComplete(direction) {
+        const { onSwipeLeft, onSwipeRight, data } = this.props;
+        const item = data[this.state.index];
+
+        direction === 'right' ? onSwipeRight(item) : onSwipeLeft(item);
     }
 
     resetPosition() {
